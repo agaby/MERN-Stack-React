@@ -40,7 +40,7 @@ function Header() {
           </Menu.Item>
         </Link>
 
-        { user &&(
+        {/* { user &&( */}
         <Link href="/create">
           <Menu.Item header active={isActive('/create')}>
             <Icon
@@ -49,7 +49,8 @@ function Header() {
             />
             create
           </Menu.Item>
-        </Link>)}
+        </Link>
+        {/* )} */}
 
         {user ? (<>
         <Link href="/account">
