@@ -3,18 +3,20 @@ import {Header, Button, Modal} from 'semantic-ui-react'
 import axios from 'axios'
 import baseUrl from '../../utils/baseUrl'
 import {useRouter } from 'next/router'
-function ProductAttributes({ discription, _id }) {
-  const [modal, setModal] = React.useState(false)
-  const router = useRouter()
 
-  async function handleDelete(){
-    const url = `${baseUrl}/api/product`
-    const payload = {prams: {_id}}
-    await axios.delete(url,payload)
-    router.push('/');
+function ProductAttributes({ discription, _id }) {
+  const [modal, setModal] = React.useState(false);
+  const router = useRouter();
+
+  async function handleDelete() {
+    const url = `${baseUrl}/api/product`;
+    const payload = { params: { _id } };
+    await axios.delete(url, payload);
+    router.push("/");
   }
 
-  return <>
+  return (
+  <>
     <Header as="h3">About this product</Header>
     <p> {discription} </p>
     <Button
@@ -27,7 +29,7 @@ function ProductAttributes({ discription, _id }) {
       <Modal.Header>Confirm Delete</Modal.Header>
       <Modal.Content>
         <p>Are you sure you want to delete this product?</p>
-      </Modal.Content>
+      </Modal.Content> 
       <Modal.Actions>
         <Button 
         onClick={ () => setModal(false)}
@@ -41,7 +43,8 @@ function ProductAttributes({ discription, _id }) {
         />
       </Modal.Actions>
     </Modal>
-  </>;
+  </>
+  );
 }
 
 export default ProductAttributes;

@@ -2,6 +2,7 @@ import {Form, Input, TextArea, Button, Image, Message, Header, Icon, FormGroup} 
 import React from 'react'
 import axios from 'axios'
 import basrUrl from '../utils/baseUrl';
+import catchErrors from '../utils/catchErrors';
 
 const INITIAL_PRODUCT = {
     name: "",
@@ -15,6 +16,15 @@ function CreateProduct() {
   const [mediaPreview, setMediaPreview] = React.useState('');
   const [success, setSuccess] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+  const [disabled, setDisabled] = React.useState(true);
+  const [error, setError] = React.useState("");
+
+
+  // checks if every element in the [product] is a valid input, returns flase if an element is empty
+  React.useEffect(() => {
+    const isProduct = Object.values(product).every( e1 => Boolean(e1))
+    isProduct ? setDisabled(false) : setDisabled(true);
+  }, [product])
 
   // saves previous states when mwdia is being updated 
   function handleChange(event){
@@ -27,17 +37,23 @@ function CreateProduct() {
     }
   }
 async function handleSubmit(event){
-  event.preventDefault(); //don't refresh page
-  setLoading(true);
-  const mediaUrl = await handleImageUpload();
-  console.log({mediaUrl});
-  const url = `${basrUrl}/api/product`;
-  const payload = { ...product, mediaUrl}
-  const response = await axios.post(url, payload);
-  console.log({response});
-  setLoading(false);
-  setProduct(INITIAL_PRODUCT);
-  setSuccess(true);
+  try{
+    event.preventDefault(); //don't refresh page
+    setLoading(true);
+    setError("");
+    const mediaUrl = await handleImageUpload();
+    const url = `${basrUrl}/api/product`;
+    const payload = { ...product, mediaUrl}
+    const response = await axios.post(url, payload);
+    console.log({response});
+    setProduct(INITIAL_PRODUCT);
+    setSuccess(true);
+  } catch (error){  
+    console.log(error);
+    catchErrors(error, setError);  
+  } finally{
+    setLoading(false);
+  }
 }
 
 async function handleImageUpload(){
@@ -56,7 +72,12 @@ async function handleImageUpload(){
         <Icon name="add" color="yellow"/>
         Create New Product
       </Header>
-      <Form loading={loading} success={success} onSubmit ={handleSubmit}>
+      <Form loading={loading} error={Boolean(error)} success={success} onSubmit ={handleSubmit}>
+        
+        <Message 
+          error header="Oops!"
+          content= {error} 
+        />
         <Message
           success
           icon="check"
@@ -104,7 +125,7 @@ async function handleImageUpload(){
         />
         <Form.Field
           control={Button}
-          disabled={loading}
+          disabled={disabled || loading}
           color="blue"
           icon="pencil alternate"
           content="submit"
