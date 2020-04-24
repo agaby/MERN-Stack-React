@@ -4,6 +4,8 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import isEmail from 'validator/lib/isEmail';
 import isLength from 'validator/lib/isLength';
+import Cart from '../../models/Cart';
+
 
 connectDB();
 
@@ -35,6 +37,8 @@ export default async (req, res) =>{
             password: hash
           }).save();
           console.log({ newUser });
+        //create cart for new user
+          await new Cart({user: newUser._id}).save();
         //create token for the new user
         const token = jwt.sign({userId: newUser._id}, process.env.JWT_SECRET, {
             expiresIn: '7d'  })
