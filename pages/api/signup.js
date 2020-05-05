@@ -11,7 +11,6 @@ connectDB();
 
 export default async (req, res) =>{
     const { name, email, password } = req.body;
-    console.log(typeof(password));
     try{
         //validate name, email and passowrd
         if(! isLength(name, {min: 2, max:10})){
@@ -29,14 +28,12 @@ export default async (req, res) =>{
         } else{
         //else hash passowrd
         const hash = await bcrypt.hash(password, 10);
-        console.log("hash: "+ hash.toString);
         // create  user
         const newUser = await new User({
             name,
             email,
             password: hash
           }).save();
-          console.log({ newUser });
         //create cart for new user
           await new Cart({user: newUser._id}).save();
         //create token for the new user

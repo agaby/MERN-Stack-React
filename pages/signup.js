@@ -37,7 +37,6 @@ function Signup() {
       const payload = { ...user };
       const response = await axios.post(url, payload); //token gets sent to client 
       handleLogin(response.data);
-      console.log({response})
     } catch(error){
       catchErrors(error, setError);
 

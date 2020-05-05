@@ -37,7 +37,6 @@ async function handleGetRequest(req, res) {
       path: "products.product",
       model: "Product"
     });
-    console.log(cart)
     res.status(200).json(cart.products);
   } catch (error) {
     console.error("error: +\n"+error);
@@ -62,7 +61,6 @@ async function handlePutRequest(req, res) {
     const productExists = cart.products.some(doc =>
       ObjectId(productId).equals(doc.product)
     );
-    console.log("productExists: \n"+ productExists);
     // If so, increment quantity (by number provided to request)
     if (productExists) {
       await Cart.findOneAndUpdate(

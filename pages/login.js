@@ -35,7 +35,6 @@ function Login() {
       setError("");
       const url = `${baseURL}/api/login`;
       const payload = { ...user};
-      console.log({payload});
       const response = await axios.post(url, payload);
       handleLogin(response.data);
     } catch(error){

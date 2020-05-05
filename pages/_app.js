@@ -33,7 +33,6 @@ class MyApp extends App {
         // if authenticated but not admin or root, redirect from the create page
         const isNotPermitted = !(isRoot || isAdmin) && ctx.pathname === '/create';
         if(isNotPermitted){
-          console.log(isNotPermitted)
           redirectUser(ctx, '/');
         }
         pageProps.user = user;

@@ -45,11 +45,10 @@ async function handleSubmit(event){
     const url = `${basrUrl}/api/product`;
     const payload = { ...product, mediaUrl}
     const response = await axios.post(url, payload);
-    console.log({response});
     setProduct(INITIAL_PRODUCT);
     setSuccess(true);
   } catch (error){  
-    console.log(error);
+    console.error(error);
     catchErrors(error, setError);  
   } finally{
     setLoading(false);
